@@ -1,2 +1,3 @@
 # curso_python
-Curso De Python
+Curso De Python De Desarrollo IV
+Impartido Por La Universidad De Sonora

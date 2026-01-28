@@ -7,14 +7,13 @@ def check_winner(d:dict, combo_list:list)->bool:
     """
     Check if there is a winner
     """
-    #
 
     for combo in combo_list:
         if d[combo[0]] == d[combo[1]] == d[combo[2]]:
             return True
         return False
 
-def game():
+def game() -> str:
 
     """
     Here lives the main game loop
@@ -47,13 +46,18 @@ def game():
                 current_player = o_player
             else:
                 current_player = x_player
-                board.display_board(dboard)
-            if winner:
-                print(f"Winner: Player {w_player}")
-            else:
-                print(f"It's a tie!")
+    board.display_board(dboard)
+    return w_player
+            #if winner:
+                #print(f"Winner: Player {w_player}")
+            #else:
+                #print(f"It's a tie!")
 
 if __name__ == "__main__":
-    game()
+    win = game()
+    if len(win) > 0:
+        print(f"Winner: Player {win}")
+    else:
+        print(f"It´s a tie!")
 
     

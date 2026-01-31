@@ -1,9 +1,7 @@
 """
 Author: Alan Horacio Bejarano Castro Here goes the game logic for Tictactoe 
 """
-from game_logic import game
-
-from gqme_logic import game 
+##from game_logic import game
 from game_logic import two_players
 from menu import display_menu
 
@@ -21,6 +19,8 @@ def main():
         elif choise == 3:
             print("Exiting the game. Goodbye!")
             break
+        else:
+            print("Invalid choise. Please select a valid option")
 
 if __name__ == "__main__":
     main()

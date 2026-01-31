@@ -58,6 +58,7 @@ def play_game(players:2)->None:
     """ Two players game loop
     """
     if players ==1:
+        playing = True
         print("One player mode is not implemented yet.")
         return
     else:
@@ -75,6 +76,47 @@ def play_game(players:2)->None:
             if replay != 'y':
                 playing = False
             print(f"Score: X = {score['X']}, 0 = {score['0']}, Ties = {score['Ties']}")
+
+def game_vs_computer()->str:
+    """
+    Game vs computer loop
+    """
+    turns = 0
+    dboard = {x:str(x) for x in range(9)}
+    combo_list = [
+        [0,1,2], [3,4,5], [6,7,8], # rows
+        [0,3,6], [1,4,7], [2,5,8], # columns
+        [0,4,2], [2,4,6]           # diagonals
+    ]
+    x_player = "X"
+    o_player = "O"
+    current_player = x_player
+    w_player = ""
+
+    winner = False
+    while turns < 9 and not winner:
+        board.display_board(dboard)
+        valid_move = False
+        if current_player == x_player:
+            while not valid_move:
+                valid_move = board.player_turn(current_player, dboard)
+        else:
+            print("Computer's turn:")
+            while not valid_move:
+                move = random.randint(0,8)
+                if str(dboard[move]) == str(move):
+                    dboard[move] == o_player
+                    valid_move = True
+        turns += 1
+        winner = check_winner(dboard, combo_list)
+        if winner:
+            w_player = current_player
+        if current_player == x_player:
+            current_player = o_player
+        else:
+                current_player = x_player
+    board.display_board(dboard)
+    return w_player
 
 if __name__ == "__main__":
     play_game(2)

@@ -2,7 +2,7 @@
 Author: Alan Horacio Bejarano Castro Here goes the game logic for Tictactoe 
 """
 ##from game_logic import game
-from game_logic import two_players
+from game_logic import play_game
 from menu import display_menu
 
 def main():
@@ -12,10 +12,10 @@ def main():
     while True:
         choise = display_menu()
         if choise == 1:
-            print("One Player Game is not implemented yet.")
+            play_game(1)
             # Here you would call the one player game fuction when implemented
         elif choise == 2:
-            two_players()
+            play_game(2)
         elif choise == 3:
             print("Exiting the game. Goodbye!")
             break

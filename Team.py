@@ -1,7 +1,7 @@
 """
 Docstring fot Team
 """
-from Ahtlete import Ahtlete
+from Athlete import Athlete
 from Sport import Sport
 
 class Team:
@@ -28,7 +28,7 @@ class Team:
         """
         Add and athlete to the team
         """
-        if isinstance(athlete, Ahtlete):
+        if isinstance(athlete, Athlete):
             self.athletes.append(athlete)
         else:
             raise ValueError("Only athletes objetcs can be added to the team")
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     a = Athlete("Lionel Messi")
     b = Athlete("Diego Armando")
     s = Sport("Futbol",11,"FIFA")
-    argentina = Teams("Argentina",s)
+    argentina = Team("Argentina",s)
     print(argentina)
     print(repr(argentina))
     print(argentina.to_json())

@@ -20,7 +20,7 @@ class Sport:
         if name in self.max_score:
             self.name = name
         else:
-            raise ValueError(f"Sport name must be one of the following: {', '.join(self.max_score.keys)}")
+            raise ValueError(f"Sport name must be one of the following: {', '.join(self.max_score.keys())}")
     
     def __str__(self):
         return f"{self.name} ({self.league}) - {self.num_players} players"

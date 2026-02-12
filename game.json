@@ -1,0 +1,50 @@
+{
+    "team_a": {
+        "name": "Mexico",
+        "sport": {
+            "name": "Futbol",
+            "league": "FIFA",
+            "num_players": 11
+        },
+        "athletes": [
+            {
+                "name": "Chicharito",
+                "number": 0
+            },
+            {
+                "name": "Raul Jimenez",
+                "number": 0
+            },
+            {
+                "name": "Hirving Lozano",
+                "number": 0
+            }
+        ]
+    },
+    "team_b": {
+        "name": "Argentina",
+        "sport": {
+            "name": "Futbol",
+            "league": "FIFA",
+            "num_players": 11
+        },
+        "athletes": [
+            {
+                "name": "Lionel Messi",
+                "number": 0
+            },
+            {
+                "name": "Serigio Aguero",
+                "number": 0
+            },
+            {
+                "name": "Paulo Dybala",
+                "number": 0
+            }
+        ]
+    },
+    "score": {
+        "Mexico": 0,
+        "Argentina": 0
+    }
+}

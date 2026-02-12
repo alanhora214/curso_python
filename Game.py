@@ -2,6 +2,7 @@ from Team import Team
 from Athlete import Athlete
 from Sport import Sport
 import random
+import json
 
 class Game:
 
@@ -14,7 +15,7 @@ class Game:
         
     def set_team_a(self, team, role):
         if isinstance(team, Team):
-            if role == "visitor":
+            if role == "local":
                 self.team_a = team
             elif role == "visitor":
                 self.team_b = team
@@ -28,16 +29,37 @@ class Game:
     def __str__(self):
         return f"{self.team_a.name} vs {self.team_b.name} - Score: {self.score[self.team_a.name]}:{self.score[self.team_b.name]}"
     
+    def to_json(self):
+        """
+        """
+        return {
+            "team_a":self.team_a.to_json(),
+            "team_b":self.team_b.to_json(),
+            "score": self.score
+        }
+    
+def a_game():
+        """
+        Docstring for a_game
+        """
+        players_mex = ('Chicharito', 'Raul Jimenez', 'Hirving Lozano')
+        players_arg = ('Lionel Messi', 'Serigio Aguero', 'Paulo Dybala')
+        sport = Sport("Futbol", 11, "FIFA")
+        team_mex = Team("Mexico", sport)
+        team_arg = Team("Argentina", sport)
+        for player in players_mex:
+            team_mex.add_athlete(Athlete(player))
+        for player in players_arg:
+            team_arg.add_athlete(Athlete(player))
+        game = Game(team_mex, team_arg)
+        game_string = game.to_json()
+        return game_string
+
+def save_game_to_json(game_data, filename):
+        """
+        """
+        with open(filename, 'w', encoding='utf-8') as f:json.dump(game_data, f, indent=4)
+        
 if __name__ == "__main__":
-    a = Athlete("Lionel Messi")
-    b = Athlete("Diego Armando")
-    s = Sport("Futbol",11,"FIFA")
-    argentina = Team("Argentina",s)
-    argentina.add_athlete(a)
-    argentina.add_athlete(b)
-    brazil = Team("Brazil",s)
-    brazil.add_athlete(Athlete("Pele"))
-    brazil.add_athlete(Athlete("Zico"))
-    game = Game(argentina, brazil)
-    game.play()
-    print(game)
+    string_game = a_game()
+    save_game_to_json(string_game, "game.json")

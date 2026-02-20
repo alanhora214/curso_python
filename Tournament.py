@@ -1,6 +1,7 @@
 import random
 import json
 from Game import Game
+from Group import Group
 from Team import Team
 from Sport import Sport
 from Athlete import Athlete
@@ -8,20 +9,16 @@ from Athlete import Athlete
 class Tournament:
     """ Tournament class represents a tournament. It has a name, a sport, and a list of teams. """
 
-    def __init__(self, name: str, sport: Sport):
+    def __init__(self, name):
         """ Custom constructor for Tournament class. """
         self.name = name
-        self.sport = sport
         self.teams = []
         self.games = []
 
     def add_team(self, team: Team):
         """ Add a team to the tournament. """
         if isinstance(team, Team):
-            if team.sport.name == self.sport.name:
-                self.teams.append(team)
-            else:
-                raise ValueError("Team's sport does not match the tournament's sport.")
+            self.teams.append(team)
         else:
             raise ValueError("Only Team objects can be added to the tournament.")
 
@@ -52,18 +49,39 @@ class Tournament:
         """ Convert the Tournament object to a JSON string. """
         return {
             "name": self.name,
-            "sport": self.sport.to_json(),
             "teams": [team.to_json() for team in self.teams],
             "games": [game.to_json() for game in self.games]
         }
     
+    def set_group(self,group_list, group_name):
+        """ Set a group for the tournament by pairing teams randomly. """
+        group = Group(group_name)
+        for team in group_list:
+            group.add_team(team)
+        self.groups[group_name] = group
+
+    def set_group_stage(self):
+        """ Set the group stage for the tournament by pairing teams randomly. """
+        if len(self.teams) == 8:
+            group_a = self.teams[:4]
+            group_b = self.teams[4:]
+            for i in range(len(group_a)):
+                game = Game(group_a[i], group_b[j])
+                self.games.append(game)
+
+
     def load_json(self, filename)       :
         """ Load a Tournament object from a JSON file. """
         with open(filename, 'r', encoding="utf-8") as f:
             data = json.load(f)
         for team_data in data["teams"]:
             team = Team(team_data["name"], team_data["name"])
-            players = team_data["atheletes"]
+            players = team_data["athletes"]
             for player in players:
                 team.add_athlete(Athlete(player))
             self.add_team(team)
+
+if __name__ == "__main__":  
+    tournament = Tournament("FIFA World Cup")
+    tournament.load_json("tournament.json")
+    print(tournament)

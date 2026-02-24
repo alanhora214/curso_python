@@ -1,50 +1,40 @@
+"""
+Docstring for game_tournament.Tournament
+"""
 import random
 import json
 from Game import Game
-from Group import Group
 from Team import Team
 from Sport import Sport
 from Athlete import Athlete
+from Group import Group
 
 class Tournament:
-    """ Tournament class represents a tournament. It has a name, a sport, and a list of teams. """
-
+    """ Tournament class represents a tournament. It has a name, a list of games, and a list of teams. """
     def __init__(self, name):
         """ Custom constructor for Tournament class. """
         self.name = name
-        self.teams = []
         self.games = []
-
-    def add_team(self, team: Team):
+        self.teams = []
+        self.groups = {}
+    def add_team(self, team):
         """ Add a team to the tournament. """
         if isinstance(team, Team):
             self.teams.append(team)
         else:
-            raise ValueError("Only Team objects can be added to the tournament.")
-
-    def schedule_games(self):
-        """ Schedule games for the tournament by pairing teams randomly. """
-        if len(self.teams) < 2:
-            raise ValueError("At least two teams are required to schedule games.")
-        
-        random.shuffle(self.teams)
-        for i in range(0, len(self.teams) - 1, 2):
-            game = Game(self.teams[i], self.teams[i + 1])
+            raise ValueError("Only Team objects can be added as a team.")
+    def add_game(self, game):
+        """ Add a game to the tournament. """
+        if isinstance(game, Game):
             self.games.append(game)
-
-    def play_tournament(self):
-        """ Simulate playing all games in the tournament. """
-        for game in self.games:
-            game.play()
-
+        else:
+            raise ValueError("Only Game objects can be added as a game.") 
     def __str__(self):
         """ String representation of the Tournament class. """
         return f"Tournament: {self.name}, Teams: {len(self.teams)}, Games: {len(self.games)}"
-
     def __repr__(self):
         """ String representation of the Tournament class. """
         return f"Tournament(name={self.name}, teams={repr(self.teams)}, games={repr(self.games)})"
-
     def to_json(self):
         """ Convert the Tournament object to a JSON string. """
         return {
@@ -52,36 +42,51 @@ class Tournament:
             "teams": [team.to_json() for team in self.teams],
             "games": [game.to_json() for game in self.games]
         }
-    
-    def set_group(self,group_list, group_name):
-        """ Set a group for the tournament by pairing teams randomly. """
+    def set_group(self, group_list, group_name):
+        """ Set the group for each team in the tournament. """
         group = Group(group_name)
         for team in group_list:
             group.add_team(team)
+        group.add_games()
         self.groups[group_name] = group
-
     def set_group_stage(self):
-        """ Set the group stage for the tournament by pairing teams randomly. """
+        """ Set the group stage """
         if len(self.teams) == 8:
+            # Create two groups of 4 teams each
             group_a = self.teams[:4]
             group_b = self.teams[4:]
-            for i in range(len(group_a)):
-                game = Game(group_a[i], group_b[j])
-                self.games.append(game)
-
-
-    def load_json(self, filename)       :
-        """ Load a Tournament object from a JSON file. """
+            # Create games for group A
+            self.set_group(group_a, "Group A")
+            # Create games for group B
+            self.set_group(group_b, "Group B")
+    def load_json(self, filename):
+        """ Load a Tournament object from a JSON file."""
+        print("Tournament")
         with open(filename, 'r', encoding="utf-8") as f:
             data = json.load(f)
-        for team_data in data["teams"]:
-            team = Team(team_data["name"], team_data["name"])
-            players = team_data["athletes"]
-            for player in players:
-                team.add_athlete(Athlete(player))
-            self.add_team(team)
+            for team_data in data:
+                team_name = team_data["name"]
+                sport_name = team_data["sport"]["name"]
+                sport_league = team_data["sport"]["league"]
+                sport_num_players = team_data["sport"]["num_players"]
+                sport = Sport(sport_name, sport_num_players, sport_league)
+                team = Team(team_name, sport)
+                players = team_data["athletes"]
+                for player in players:
+                    team.add_athlete(Athlete(player))
+                self.add_team(team)
+    def display_tournament(self):
+        """ Display the tournament. """
+        print(f"Tournament: {self.name}")
+        for group in self.groups:
+            self.groups[group].display_group()
+        for group in self.groups:
+            self.groups[group].display_group_games()
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
     tournament = Tournament("FIFA World Cup")
     tournament.load_json("tournament.json")
-    print(tournament)
+    tournament.set_group_stage()
+    tournament.display_tournament()
+    #print(tournament.groups['Group B'].games)
+   # print(tournament)

@@ -35,3 +35,22 @@ class Group:
     def __repr__(self):
         """ String representation of the Group class. """
         return f"Group(name={self.name}, teams={repr(self.teams)})" 
+    
+    def to_json(self):
+        """ Convert the Group object to a JSON string. """
+        return {
+            "name": self.name,
+            "teams": [team.to_json() for team in self.teams],
+        }
+
+    def display_group(self):
+        """ Display the teams in the group. """
+        print(f"Group: {self.name}")
+        for team in self.teams:
+            print(f" {team}")
+    
+    def display_group_games(self):
+        """ Display the games scheduled for the group. """
+        print(f"Games for Group: {self.name}")
+        for game in self.games:
+            print(f" {game}")

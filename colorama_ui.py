@@ -2,6 +2,7 @@
 from colorama import Fore, Back, Style, init
 import colorama
 init(autoreset=True)
+import Game
 from Tournament import Tournament
 import os
 
@@ -33,6 +34,7 @@ class ColoramaUI:
                 self.exit_app()
             else:
                 print("Invalid choice. Please try again.")
+
     def open_tournament(self):
         """ Open tournament from JSON file """
         self.tournament = Tournament("Tournament")

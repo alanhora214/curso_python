@@ -83,10 +83,16 @@ class Tournament:
         for group in self.groups:
             self.groups[group].display_group_games()
 
+    def display_games(self):
+        for group in self.groups:
+            self.groups[group].display_group_games()
+
+
 if __name__ == "__main__":
     tournament = Tournament("FIFA World Cup")
     tournament.load_json("tournament.json")
     tournament.set_group_stage()
     tournament.display_tournament()
+    tournament.display_games()
     #print(tournament.groups['Group B'].games)
    # print(tournament)

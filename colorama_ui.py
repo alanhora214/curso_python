@@ -33,10 +33,11 @@ class ColoramaUI:
                 self.exit_app()
             else:
                 print("Invalid choice. Please try again.")
-    def open_tournament(self, file_path: str):
+    def open_tournament(self):
         """ Open tournament from JSON file """
         self.tournament = Tournament("Tournament")
-        self.tournament.load_json(file_path)
+        self.tournament.load_json(self.current_file)
+        self.tournament.set_group_stage()
     def display_tournament(self):
         """ Display tournament """
         # clear screen
@@ -65,13 +66,18 @@ class ColoramaUI:
         dictionary_menu = {
             "1": "Load tournament",
             "2": "Display tournament",
-            "3": "Exit"
+            "3": "Display groups",
+            "4": "Display games",
+            "5": "Play games",
+            "6": "Exit"
         }
         action_dictionary = {
             "1": self.get_tournament_json,
             "2": self.display_tournament,
-            "3"
-            "5": self.exit_app
+            "3": self.display_groups,
+            #"4": self.display_games,
+            #"5": self.play_games,
+            "6": self.exit_app
         }
 
         while True:
@@ -85,15 +91,20 @@ class ColoramaUI:
                 print("Invalid choice. Please try again.")  
 
     def display_groups(self):
+        print(Back.CYAN + Fore.WHITE, end="")
         os.system("cls" if os.name == "nt" else "clear")
-        print(Back.LIGHTBLACK_EX + Fore.WHITE + str(self.tournament))
-        for group in self.tournament.groups:
-            print(group)
-        else:
-            print("No tournament loaded.") 
+
+        print(str(self.tournament))
+        for group in self.tournament.groups.keys():
+            print(Back.GREEN + Fore.WHITE, end="")
+            self.tournament.groups[group].display_group()
+            print(Style.RESET_ALL + Back.CYAN + Fore.WHITE, end="")
+
+        print(Style.RESET_ALL, end="")
+
 
 if __name__ == "__main__":
     ui = ColoramaUI()
     ui.set_current_file("tournament.json")
-    ui.open_tournament
+    ui.open_tournament()
     ui.run()    

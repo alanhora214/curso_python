@@ -1,4 +1,6 @@
 """ Text user interface for the tournament """
+from tokenize import group
+
 from colorama import Fore, Back, Style, init
 import colorama
 init(autoreset=True)
@@ -9,13 +11,16 @@ import os
 class ColoramaUI:
     def __init__(self):
         self.tournament = None
-        self.current_file = None 
+        self.current_file = None
+
     def set_current_file(self, file_path: str):
         self.current_file = file_path
+
     def run (self):
         """ Run the colorama ui """
         colorama.init(autoreset=True)
         self.display_menu()
+
     def show_menu(self):
         """ Show the menu """
         while True:
@@ -77,8 +82,8 @@ class ColoramaUI:
             "1": self.get_tournament_json,
             "2": self.display_tournament,
             "3": self.display_groups,
-            #"4": self.display_games,
-            #"5": self.play_games,
+            "4": self.display_games,
+            "5": self.play_games,
             "6": self.exit_app
         }
 
@@ -104,6 +109,19 @@ class ColoramaUI:
 
         print(Style.RESET_ALL, end="")
 
+    def display_games(self):
+        print(Back.CYAN + Fore.WHITE, end="")
+        os.system("cls" if os.name == "nt" else "clear")
+        print(str(self.tournament))
+        self.tournament.display_games()
+        print(Style.RESET_ALL, end="")
+
+    def play_games(self):
+        print(Back.CYAN + Fore.WHITE, end="")
+        os.system("cls" if os.name == "nt" else "clear")
+        print(str(self.tournament))
+        self.tournament.play_games()
+        print(Style.RESET_ALL, end="")
 
 if __name__ == "__main__":
     ui = ColoramaUI()

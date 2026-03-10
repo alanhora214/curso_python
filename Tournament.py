@@ -80,25 +80,42 @@ class Tournament:
         print(f"Tournament: {self.name}")
         for group in self.groups:
             self.groups[group].display_group()
-        for group in self.groups:
-            self.groups[group].display_group_games()
-
+        self.display_games()
     def display_games(self):
+        """ Display the games. """
         for group in self.groups:
             self.groups[group].display_group_games()
-
-    
     def play_games(self):
+        """ Play the games. """
         for group in self.groups:
             self.groups[group].play_group_games()
         self.display_games()
-
+        self.display_standings()
+    def display_standings(self):
+        """ Display the standings of the tournament. """
+        for group in self.groups:
+            self.groups[group].display_standings()
+    def get_cualified_teams(self):
+        """ Get the qualified teams for the next stage. """
+        qualified_teams = []
+        for group in self.groups:
+            sorted_teams = sorted(self.groups[group].points.items(), key=lambda x: (x[1]['points'], x[1]['goal_difference'], x[1]['goals_for']), reverse=True)
+            qualified_teams.append(sorted_teams[0][0])
+            qualified_teams.append(sorted_teams[1][0])
+        return qualified_teams
+    def set_knockout_stage(self):
+        qualified_teams = self.get_cualified_teams()
+        # Create games for the knockout stage
+        self.set_knockout_stage = []
+        s
+    
 if __name__ == "__main__":
     tournament = Tournament("FIFA World Cup")
     tournament.load_json("tournament.json")
     tournament.set_group_stage()
     tournament.display_tournament()
+   # tournament.set_games()
     tournament.display_games()
-    tournament.play_games()
+    #print(tournament.groups['Group A'].games)
     #print(tournament.groups['Group B'].games)
    # print(tournament)

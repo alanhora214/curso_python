@@ -91,6 +91,9 @@ class Tournament:
             self.groups[group].play_group_games()
         self.display_games()
         self.display_standings()
+        self.set_knockout_stage()
+        self.play_knockout_stage()
+        self.display_final_stage()
     def display_standings(self):
         """ Display the standings of the tournament. """
         for group in self.groups:
@@ -103,19 +106,58 @@ class Tournament:
             qualified_teams.append(sorted_teams[0][0])
             qualified_teams.append(sorted_teams[1][0])
         return qualified_teams
+    
     def set_knockout_stage(self):
         qualified_teams = self.get_cualified_teams()
-        # Create games for the knockout stage
-        self.set_knockout_stage = []
-        s
+        self.knockout_stage = []
+        g1 = Game(qualified_teams[0][0], qualified_teams[1][1])
+        g2 = Game(qualified_teams[0][1], qualified_teams[1][0])
+
+        self.knockout_stage.append(g1)
+        self.knockout_stage.append(g2)
+        print(self.knockout_stage)
+
+    def play_knockout_stage(self):
+        for game in self.knockout_stage:
+            game.play()
+            if game.winner is None:
+                flip = random.randit(0,1)
+                if flip == 0:
+                    game.winner = game.team_a
+                    game.loser = game.team_b
+                else:
+                    game.winner = game.team_b
+                    game.loser = game.team_a
+        self.display_knockout_stage()
+        self.set_final_stage()
+
+    def display_knockout_stage(self):
+        print("Knockout Stage")
+        for game in self.knockout_stage:
+            print(game)
+    
+    def set_final_stage(self):
+        self.final_stage = []
+        g1 = Game(self.knockout_stage[0].winner, self.knockout_stage[1].winner)
+        g3 = Game(self.knockout_stage[0].loser, self.knockout_stage[1].loser)
+        self.final_stage.append(g1)
+        self.final_stage.append(g3)
+    def play_final_stage(self):
+        for game in self.final_stage:
+            game.play()
+        self.display_final_stage()
+    def display_final_stage(self):
+        print("Final Stage")
+        for game in self.final_stage:
+            print(game)
     
 if __name__ == "__main__":
     tournament = Tournament("FIFA World Cup")
     tournament.load_json("tournament.json")
     tournament.set_group_stage()
     tournament.display_tournament()
-   # tournament.set_games()
+    #tournament.set_games()
     tournament.display_games()
     #print(tournament.groups['Group A'].games)
     #print(tournament.groups['Group B'].games)
-   # print(tournament)
+    #print(tournament)

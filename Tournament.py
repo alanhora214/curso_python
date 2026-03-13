@@ -112,7 +112,6 @@ class Tournament:
         self.knockout_stage = []
         g1 = Game(qualified_teams[0][0], qualified_teams[1][1])
         g2 = Game(qualified_teams[0][1], qualified_teams[1][0])
-
         self.knockout_stage.append(g1)
         self.knockout_stage.append(g2)
         print(self.knockout_stage)

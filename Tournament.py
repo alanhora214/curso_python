@@ -93,34 +93,33 @@ class Tournament:
         self.display_standings()
         self.set_knockout_stage()
         self.play_knockout_stage()
+        self.play_final_stage()
         self.display_final_stage()
     def display_standings(self):
         """ Display the standings of the tournament. """
         for group in self.groups:
             self.groups[group].display_standings()
-    def get_cualified_teams(self):
+    def get_qualified_teams(self):
         """ Get the qualified teams for the next stage. """
         qualified_teams = []
         for group in self.groups:
-            sorted_teams = sorted(self.groups[group].points.items(), key=lambda x: (x[1]['points'], x[1]['goal_difference'], x[1]['goals_for']), reverse=True)
-            qualified_teams.append(sorted_teams[0][0])
-            qualified_teams.append(sorted_teams[1][0])
+            qualified_teams.append(self.groups[group].get_qualified_teams())
         return qualified_teams
-    
     def set_knockout_stage(self):
-        qualified_teams = self.get_cualified_teams()
+        """ Set the knockout stage """
+        qualified_teams = self.get_qualified_teams()
         self.knockout_stage = []
-        g1 = Game(qualified_teams[0][0], qualified_teams[1][1])
-        g2 = Game(qualified_teams[0][1], qualified_teams[1][0])
+        g1 = Game(qualified_teams[0][0],qualified_teams[1][1])
+        g2 = Game(qualified_teams[0][1],qualified_teams[1][0])
         self.knockout_stage.append(g1)
         self.knockout_stage.append(g2)
         print(self.knockout_stage)
-
     def play_knockout_stage(self):
+        """ Play the knockout stage """
         for game in self.knockout_stage:
             game.play()
             if game.winner is None:
-                flip = random.randit(0,1)
+                flip = random.randint(0, 1)
                 if flip == 0:
                     game.winner = game.team_a
                     game.loser = game.team_b
@@ -129,23 +128,24 @@ class Tournament:
                     game.loser = game.team_a
         self.display_knockout_stage()
         self.set_final_stage()
-
     def display_knockout_stage(self):
+        """ Display the knockout stage """
         print("Knockout Stage")
         for game in self.knockout_stage:
             print(game)
-    
     def set_final_stage(self):
+        """ Set the final stage """
         self.final_stage = []
-        g1 = Game(self.knockout_stage[0].winner, self.knockout_stage[1].winner)
-        g3 = Game(self.knockout_stage[0].loser, self.knockout_stage[1].loser)
+        g1 = Game(self.knockout_stage[0].winner,self.knockout_stage[1].winner)
+        g3 = Game(self.knockout_stage[0].loser,self.knockout_stage[1].loser)
         self.final_stage.append(g1)
         self.final_stage.append(g3)
     def play_final_stage(self):
+        """ Play the final stage """
         for game in self.final_stage:
             game.play()
-        self.display_final_stage()
     def display_final_stage(self):
+        """ Display the final stage """
         print("Final Stage")
         for game in self.final_stage:
             print(game)

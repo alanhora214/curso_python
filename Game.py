@@ -145,9 +145,8 @@ def a_tournament():
                        team_spain, team_brazil, team_italia, team_japan]
     return [team.to_json() for team in tournament_list]
 
-
 if __name__ == "__main__":
     string_game = a_tournament()
-    print(string_game)  
+    print(string_game)
     save_game_to_json(string_game, "tournament.json")
     print(string_game)

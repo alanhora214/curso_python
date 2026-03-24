@@ -1,5 +1,5 @@
 """
-Docstring for game_tournament.Group
+Docstring for game_tournament.Groups
 """
 import random
 from Team import Team

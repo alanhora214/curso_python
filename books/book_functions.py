@@ -27,6 +27,13 @@ def create_author_dictionary(books:list[Book])->dict[str, list[Book]]:
                 author_dict[name].append(book)
     return author_dict
 
+def create_book_dictionary(book_list:list)->dict[int, Book]:
+    """Return a dictionary with book id as keys and book objects as values"""
+    book_dict = {}
+    for book in book_list:
+        book_dict[book.id] = book
+    return book_dict
+
 if __name__ == "__main__":
     # Load books from csv file
     books = load_books("booklist2000.csv")

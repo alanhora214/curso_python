@@ -12,17 +12,17 @@ book_dict = create_book_dictionary(books)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("new_index.html")
 
 @app.route("/search_by_author", methods=["GET", "POST"])
 def search_by_author():
     if request.method == "POST":
         author = request.form["author"]
         books_list = author_dict.get(author.lower(), [])
-        return render_template("search_by_author.html", books=books_list)
+        return render_template("new_search_by_author.html", books=books_list)
     else:
-        return render_template("search_by_author.html", books_list=books[:10])
-    
+        return render_template("new_search_by_author.html", books_list=books[:10])
+
 @app.route("/book/<string:book_id>")
 def book_detail(book_id):
     book = book_dict.get(book_id)

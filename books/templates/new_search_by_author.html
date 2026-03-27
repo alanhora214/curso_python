@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Search by Author{% endblock %}
+{% block body %}
+<div>
+    <div>
+        <center>
+            <img src="/static/images/libra_online_book_cbg.png" alt="Libra Online Library" height="100">
+        </center>
+    </div>
+    <div>
+        <center>
+            <h1>Libra Online Library</h1>
+            <p>Online library with a collection of books of all genres</p>
+        </center>
+<div>
+    <div>
+        <center>
+<h1>Search by Author</h1>
+<form action="/search_by_author" method="post">
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author">
+    <input type="submit" value="Search">
+</center>
+    </div>
+    <div>
+        <center>
+</form>
+<ul>
+    {% for book in books %}
+    <li><a href="/book/{{ book.id }}">{{ book.title }}</a> by {{ book.author }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}  

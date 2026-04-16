@@ -1,11 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Frases Celebres de Películas - Home{% endblock %}
+{% block body %}
+<div class="container">
+    <div>
+        <form action="/frase" method="post">
+            <label for="frase">Frase:</label>
+            <input type="text" id="frase" name="frase">
+            <label for="umbral">Umbral</label>
+            <input type="range" class="" id="umbral" name="umbral" min="0" max="1" step="0.01" value="0.5">
+            <button type="submit">Buscar Frase</button>
+        </form>
+        <h2>Frases Agregadas:</h2>
+        <ul>
+            {% for frase in frases %}
+            <li>{{ frase }}</li>
+            {% endfor %}    
+        </ul>
+    </div>  
+</div>
+{% endblock %}  

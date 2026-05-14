@@ -1,4 +1,5 @@
 """ PDF functions for searching and processing PDF files from a webpage. """
+from markitdown import MarkItDown
 import requests
 from bs4 import BeautifulSoup
 import os 
@@ -23,6 +24,17 @@ def extract_pdf_links(html):
             pdf_links.append(href)
     return pdf_links
 
+def convert_pdf_to_markdown(pdf_path, markdown_path):
+    """ Converts a PDF file to Markdown format using MarkItDown."""
+    try:
+        converter = MarkItDown()
+        result = converter.convert(pdf_path)
+        markdown_content = result.markdown or result.text_content
+        with open(markdown_path, 'w', encoding='utf-8') as f:
+            f.write(markdown_content)
+    except Exception as e:
+        print(f"Error converting PDF to Markdown: {e}")
+
 def download_pdf(url, filename):
     """ Downloads a PDF file from a given URL and saves it with a specified filename."""
     try:
@@ -33,41 +45,38 @@ def download_pdf(url, filename):
     except requests.exceptions.RequestException as e:
         print(f"Error downloading the PDF: {e}")
 
-def get_pdf(url = "https://fi-ing.unison.mx/acuerdos-de-sesiones-del-h-colegio-de-la-facultad-interdisciplinaria-de-ingenieria-2026/"):
+def get_pdfs(url = "https://fi-ing.unison.mx/acuerdos-de-sesiones-del-h-colegio-de-la-facultad-interdisciplinaria-de-ingenieria-2026/"):
+    """ Main function to orchestrate the PDF downloading process."""
+    
     download_path = "downloaded_pdfs"
+    markdown_path = "markdown_files"
     if not os.path.exists(download_path):
-        os.makedirs(download_path)
+        # Create the directory if it doesn't exist
+        os.makedirs(download_path, exist_ok=True)
+    if not os.path.exists(markdown_path):
+        os.makedirs(markdown_path, exist_ok=True)
     html = get_webpage(url)
     if not html:
         print(f"Failed to fetch the webpage: {url}")
         exit(1)
     pdf_links = extract_pdf_links(html)
+    pdf_dict = {}
     for link in pdf_links:
         print(link)
         filename = link.split('/')[-1]
-        downloaded_file = os.path.join(download_path, filename)
-        download_pdf(link, f"pdf_{filename}")
-        print(f"Downloaded: {filename}")
-
-def convert_pdf_to_markdown(pdf_path, markdown_path):
-    """ Converts a PDF file to Markdown format using pdf2markdown library."""
-    try:
-        converter = MarkItDown()
-        result = converter.convert(pdf_path)
-        markdown_content = result.markdown or result.text_content
-        with open(markdown_path, 'w', encoding='utf-8') as f:
-            f.write(markdown_content)
-    except Exception as e:
-        print(f"Error converting PDF to Markdown: {e}")
+        downloaded_file = os.path.join(download_path, filename) 
+        download_pdf(link, f"{downloaded_file}")
+        print(f"Downloaded: {downloaded_file}")
+    return pdf_dict
 
 def main():
-    if not os.path.exists("markdown_files"):
-        os.makedirs("markdown_files", exist_ok=True)
-    for filename in os.listdir("downloaded_pdfs"):
-        if filename.endswith('.pdf'):
-            pdf_path = os.path.join("downloaded_pdfs", filename)
-            markdown_path = os.path.join("markdown_files", f"{os.path.splitext(filename)[0]}.md")
-            convert_pdf_to_markdown(pdf_path, markdown_path)
+    for key, pdf in pdf_dictionary.items():
+        print(f"Processing PDF: {key}")
+        markdown_file = f"{key}.md"
+        convert_pdf_to_markdown(pdf, markdown_file)
+        print(f"Converted {key} to Markdown: {markdown_file}")
+    pdf_dictionary = get_pdfs()
+    print(pdf_dictionary.keys())
 
 if  __name__ == "__main__":
     main()
